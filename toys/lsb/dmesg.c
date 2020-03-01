@@ -48,7 +48,7 @@ static void color(int c)
 static void format_message(char *msg, int new)
 {
   unsigned long long time_s, time_us;
-  int facpri, subsystem, pos;
+  int facpri, subsystem, pos, pad;
   char *p, *text;
 
   // The new /dev/kmsg and the old syslog(2) formats differ slightly.
@@ -72,7 +72,11 @@ static void format_message(char *msg, int new)
   if (toys.optflags&FLAG_r) {
     color(0);
     printf("<%d>", facpri);
-  }
+    if (facpri < 10)
+      pad = 3;
+    else
+      pad = 4;
+  } else pad = 0;
 
   // Format the time.
   if (!(toys.optflags&FLAG_t)) {
@@ -81,8 +85,12 @@ static void format_message(char *msg, int new)
       time_t t = TT.tea+time_s;
       char *ts = ctime(&t);
 
-      printf("[%.*s] ", (int)(strlen(ts)-1), ts);
-    } else printf("[%5lld.%06lld] ", time_s, time_us);
+      pad += strlen(ts) + 2;
+      printf("[%.*s] ", pad - 3, ts);
+    } else {
+      printf("[%5lld.%06lld] ", time_s, time_us);
+      pad += 15;
+    }
   }
 
   // Errors (or worse) are shown in red, subsystems are shown in yellow.
@@ -92,7 +100,19 @@ static void format_message(char *msg, int new)
     text += subsystem;
   }
   color(31*((facpri&7)<=3));
-  xputs(text);
+
+  // A single line from /dev/kmsg can contain multi-line messages
+  while ((p = strstr(text, "\\x0a"))) {
+    *p = '\0';
+    xputs(text);
+    for (int i = 0; i < pad; i++)
+      xputc(' ');
+    text = p + 4;
+  }
+
+  // strstr() failed, no multi-line messages
+  if (p == NULL)
+    xputs(text);
 }
 
 static int xklogctl(int type, char *buf, int len)
