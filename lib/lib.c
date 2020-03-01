@@ -471,41 +471,15 @@ int strcasestart(char **a, char *b)
 off_t fdlength(int fd)
 {
   struct stat st;
-  off_t base = 0, range = 1, expand = 1, old;
+  off_t cur, ret;
 
   if (!fstat(fd, &st) && S_ISREG(st.st_mode)) return st.st_size;
 
-  // If the ioctl works for this, return it.
-  // TODO: is blocksize still always 512, or do we stat for it?
-  // unsigned int size;
-  // if (ioctl(fd, BLKGETSIZE, &size) >= 0) return size*512L;
+  cur = lseek(fd, 0, SEEK_CUR);
+  ret = lseek(fd, 0, SEEK_END);
+  lseek(fd, cur, SEEK_SET);
 
-  // If not, do a binary search for the last location we can read.  (Some
-  // block devices don't do BLKGETSIZE right.)  This should probably have
-  // a CONFIG option...
-
-  // If not, do a binary search for the last location we can read.
-
-  old = lseek(fd, 0, SEEK_CUR);
-  do {
-    char temp;
-    off_t pos = base + range / 2;
-
-    if (lseek(fd, pos, 0)>=0 && read(fd, &temp, 1)==1) {
-      off_t delta = (pos + 1) - base;
-
-      base += delta;
-      if (expand) range = (expand <<= 1) - base;
-      else range -= delta;
-    } else {
-      expand = 0;
-      range = pos - base;
-    }
-  } while (range > 0);
-
-  lseek(fd, old, SEEK_SET);
-
-  return base;
+  return ret;
 }
 
 char *readfd(int fd, char *ibuf, off_t *plen)
