@@ -2512,6 +2512,14 @@
 #undef FLAG_h
 #endif
 
+// setprop <2>2 <2>2
+#undef OPTSTR_setprop
+#define OPTSTR_setprop "<2>2"
+#ifdef CLEANUP_setprop
+#undef CLEANUP_setprop
+#undef FOR_setprop
+#endif
+
 // setsid ^<1wcd[!dc] ^<1wcd[!dc]
 #undef OPTSTR_setsid
 #define OPTSTR_setsid "^<1wcd[!dc]"
