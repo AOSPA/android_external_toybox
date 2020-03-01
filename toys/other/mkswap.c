@@ -26,13 +26,18 @@ void mkswap_main(void)
   off_t len = fdlength(fd);
   unsigned int pages = (len/pagesize)-1, *swap = (unsigned int *)toybuf;
   char *label = (char *)(swap+7), *uuid = (char *)(swap+3);
+  void *zero;
 
   // Write header. Note that older kernel versions checked signature
   // on disk (not in cache) during swapon, so sync after writing.
 
+  // Remove existing file-system signature
+  zero = xzalloc(1024);
+  xwrite(fd, zero, 1024);
+  free(zero);
+
   swap[0] = 1;
   swap[1] = pages;
-  xlseek(fd, 1024, SEEK_SET);
   create_uuid(uuid);
   if (TT.L) strncpy(label, TT.L, 15);
   xwrite(fd, swap, 129*sizeof(unsigned int));
