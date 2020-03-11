@@ -218,7 +218,7 @@
 #undef FLAG_L
 #endif
 
-// chattr ?p#v#R ?p#v#R
+// chattr   ?p#v#R
 #undef OPTSTR_chattr
 #define OPTSTR_chattr "?p#v#R"
 #ifdef CLEANUP_chattr
@@ -1648,7 +1648,7 @@
 #undef FLAG_color
 #endif
 
-// lsattr ldapvR ldapvR
+// lsattr   ldapvR
 #undef OPTSTR_lsattr
 #define OPTSTR_lsattr "ldapvR"
 #ifdef CLEANUP_lsattr
@@ -3626,9 +3626,9 @@
 #ifndef TT
 #define TT this.chattr
 #endif
-#define FLAG_R (1<<0)
-#define FLAG_v (1<<1)
-#define FLAG_p (1<<2)
+#define FLAG_R (FORCED_FLAG<<0)
+#define FLAG_v (FORCED_FLAG<<1)
+#define FLAG_p (FORCED_FLAG<<2)
 #endif
 
 #ifdef FOR_chcon
@@ -4836,12 +4836,12 @@
 #ifndef TT
 #define TT this.lsattr
 #endif
-#define FLAG_R (1<<0)
-#define FLAG_v (1<<1)
-#define FLAG_p (1<<2)
-#define FLAG_a (1<<3)
-#define FLAG_d (1<<4)
-#define FLAG_l (1<<5)
+#define FLAG_R (FORCED_FLAG<<0)
+#define FLAG_v (FORCED_FLAG<<1)
+#define FLAG_p (FORCED_FLAG<<2)
+#define FLAG_a (FORCED_FLAG<<3)
+#define FLAG_d (FORCED_FLAG<<4)
+#define FLAG_l (FORCED_FLAG<<5)
 #endif
 
 #ifdef FOR_lsmod

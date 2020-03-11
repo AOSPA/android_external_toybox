@@ -90,8 +90,8 @@
 #define USE_CAT(...) __VA_ARGS__
 #define CFG_CD 0
 #define USE_CD(...)
-#define CFG_CHATTR 1
-#define USE_CHATTR(...) __VA_ARGS__
+#define CFG_CHATTR 0
+#define USE_CHATTR(...)
 #define CFG_CHCON 1
 #define USE_CHCON(...) __VA_ARGS__
 #define CFG_CHGRP 1
@@ -332,8 +332,8 @@
 #define USE_LOGWRAPPER(...)
 #define CFG_LOSETUP 1
 #define USE_LOSETUP(...) __VA_ARGS__
-#define CFG_LSATTR 1
-#define USE_LSATTR(...) __VA_ARGS__
+#define CFG_LSATTR 0
+#define USE_LSATTR(...)
 #define CFG_LS_COLOR 1
 #define USE_LS_COLOR(...) __VA_ARGS__
 #define CFG_LSMOD 1
