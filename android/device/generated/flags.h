@@ -2664,6 +2664,14 @@
 #undef FLAG_a
 #endif
 
+// start    
+#undef OPTSTR_start
+#define OPTSTR_start 0
+#ifdef CLEANUP_start
+#undef CLEANUP_start
+#undef FOR_start
+#endif
+
 // stat <1c:(format)fLt <1c:(format)fLt
 #undef OPTSTR_stat
 #define OPTSTR_stat "<1c:(format)fLt"
@@ -2674,6 +2682,14 @@
 #undef FLAG_L
 #undef FLAG_f
 #undef FLAG_c
+#endif
+
+// stop    
+#undef OPTSTR_stop
+#define OPTSTR_stop 0
+#ifdef CLEANUP_stop
+#undef CLEANUP_stop
+#undef FOR_stop
 #endif
 
 // strings t:an#=4<1fo t:an#=4<1fo
@@ -5538,6 +5554,12 @@
 #define FLAG_h (1<<3)
 #endif
 
+#ifdef FOR_setprop
+#ifndef TT
+#define TT this.setprop
+#endif
+#endif
+
 #ifdef FOR_setsid
 #ifndef TT
 #define TT this.setsid
@@ -5662,6 +5684,12 @@
 #define FLAG_a (1<<2)
 #endif
 
+#ifdef FOR_start
+#ifndef TT
+#define TT this.start
+#endif
+#endif
+
 #ifdef FOR_stat
 #ifndef TT
 #define TT this.stat
@@ -5670,6 +5698,12 @@
 #define FLAG_L (1<<1)
 #define FLAG_f (1<<2)
 #define FLAG_c (1<<3)
+#endif
+
+#ifdef FOR_stop
+#ifndef TT
+#define TT this.stop
+#endif
 #endif
 
 #ifdef FOR_strings
