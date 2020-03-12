@@ -295,6 +295,19 @@ cc_defaults {
                 "toys/posix/uuencode.c",
             ],
 
+            shared_libs: [
+                "liblog",
+                "libprocessgroup",
+                "libselinux",
+            ],
+        },
+    },
+}
+
+cc_defaults {
+    name: "toybox-symlinks",
+    target: {
+        android: {
             // not usable on Android?: freeramdisk fsfreeze makedevs nbd-client
             //                         partprobe pivot_root pwdx rev rfkill vconfig
             // currently prefer external/efs2progs: blkid lsattr
@@ -474,12 +487,6 @@ cc_defaults {
                 "yes",
                 "zcat",
             ],
-
-            shared_libs: [
-                "liblog",
-                "libprocessgroup",
-                "libselinux",
-            ],
         },
     },
 }
@@ -489,15 +496,29 @@ cc_defaults {
 //###########################################
 
 cc_binary {
-    name: "toybox",
+    name: "toybox_vendor_overlay",
+    stem: "toybox_vendor",
     defaults: ["toybox-defaults"],
+    vendor_overlay: true,
+}
+
+cc_binary {
+    name: "toybox",
+    defaults: [
+        "toybox-defaults",
+        "toybox-symlinks",
+    ],
     host_supported: true,
     recovery_available: true,
+    required: ["toybox_vendor_overlay"],
 }
 
 cc_binary {
     name: "toybox_vendor",
-    defaults: ["toybox-defaults"],
+    defaults: [
+        "toybox-defaults",
+        "toybox-symlinks",
+    ],
     vendor: true,
 }
 
